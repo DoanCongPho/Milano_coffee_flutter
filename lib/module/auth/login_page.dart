@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_coffee_app/cores/locator/locator.dart';
-
 import 'package:flutter_coffee_app/cores/services/navigation_service.dart';
 import 'package:flutter_coffee_app/module/auth/cubit/login_cubit.dart';
-
 import 'package:flutter_coffee_app/router/routes.dart';
 
 class LoginPage extends StatelessWidget {
@@ -50,24 +48,26 @@ class LoginPage extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                        child: Column(
-                          // crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 28),
-                            _buildPhoneField(),
-                            const SizedBox(height: 28),
-                            _buildPasswordField(),
-                            const SizedBox(height: 18),
-                            _buildLoginButton(context),
-                            const SizedBox(height: 5),
-                            _buildForgotPasswordText(context),
-                            const SizedBox(height: 28),
-                            _buildDividerWithText(),
-                            const SizedBox(height: 31),
-                            _buildSocialLoginButtons(),
-                            const SizedBox(height: 26),
-                            _buildRegisterText(context),
-                          ],
+                        child: SingleChildScrollView(
+                          child: Column(
+                            // crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 28),
+                              _buildPhoneField(),
+                              const SizedBox(height: 28),
+                              _buildPasswordField(),
+                              const SizedBox(height: 18),
+                              _buildLoginButton(context),
+                              const SizedBox(height: 5),
+                              _buildForgotPasswordText(context),
+                              const SizedBox(height: 28),
+                              _buildDividerWithText(),
+                              const SizedBox(height: 31),
+                              _buildSocialLoginButtons(),
+                              const SizedBox(height: 26),
+                              _buildRegisterText(context),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -80,6 +80,15 @@ class LoginPage extends StatelessWidget {
         listener: (BuildContext context, LoginState state) {
           if (state is LoginSuccessState) {
             sl.get<NavigatorService>().replace(Routes.mainPage);
+          }
+          if (state is LoginFailState) {
+            print(state.message);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message), // <--- dùng message từ state
+                backgroundColor: Colors.red,
+              ),
+            );
           }
 
           if (state is ShowHidePasswordState) {}

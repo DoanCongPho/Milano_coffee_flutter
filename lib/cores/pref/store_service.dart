@@ -10,6 +10,10 @@ abstract class StoreService {
 
   Future<void> writeData(String key, dynamic value);
 
+  Future<String?> getToken();
+
+  Future<String?> getName();
+
   String? getString(String key);
 
   bool? getBool(String key);
@@ -36,6 +40,17 @@ class StoreServiceImp implements StoreService {
     } else if (value is bool) {
       await _preferences.setBool(key, value);
     }
+  }
+
+  @override
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(PrefKey.token);
+  }
+
+  Future<String?> getName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(PrefKey.fullName);
   }
 
   @override

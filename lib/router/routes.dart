@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_coffee_app/cores/locator/locator.dart';
-import 'package:flutter_coffee_app/cores/repositories/banner_repository.dart';
+import 'package:flutter_coffee_app/cores/repositories/home_repository.dart';
 import 'package:flutter_coffee_app/module/Qr/qr_page.dart';
 import 'package:flutter_coffee_app/module/home_page/cubit/home_cubit.dart';
 import 'package:flutter_coffee_app/module/main_page/cubit/main_cubit.dart';
@@ -52,7 +52,10 @@ class Routes {
       case qrPage:
         return MaterialPageRoute(
           settings: settings, // nếu muốn giữ thông tin route
-          builder: (_) => QRPage(),
+          builder: (_) => BlocProvider(
+            create: (_) => HomeCubit(sl.get<HomeRepository>())..loadUserData(),
+            child: QRPage(),
+          ),
         );
 
       case otherPage:

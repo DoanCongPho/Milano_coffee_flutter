@@ -20,7 +20,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    context.read<HomeCubit>().loadUserData();
+
+    _initAPI();
+  }
+
+  Future<void> _initAPI() async {
+    await context.read<HomeCubit>().loadUserData();
+    await context.read<HomeCubit>().loadStore();
+    await context.read<HomeCubit>().updateNearestStoreID();
+    await context.read<HomeCubit>().loadProduct();
   }
 
   @override
@@ -38,7 +46,6 @@ class _HomePageState extends State<HomePage> {
 
                 child: Column(
                   children: [
-                    // Greeting + Buttons section
                     HomeHeader(),
                     AutoExpandedList(
                       children: [
@@ -87,9 +94,20 @@ class _HomePageState extends State<HomePage> {
                           },
                         ),
                         StoreSection(),
-
-                        ProductSelectionContent(),
-                        CustomButton(text: 'Xem thêm', onPressed: () {}),
+                        CustomButton(
+                          text: 'Xem thêm',
+                          onPressed: () {
+                            context.read<HomeCubit>().loadStore();
+                          },
+                        ),
+                        // ProductSelectionContent(),
+                        ProductList(),
+                        CustomButton(
+                          text: 'Xem thêm',
+                          onPressed: () {
+                            context.read<HomeCubit>().loadProduct();
+                          },
+                        ),
                       ],
                     ),
                   ],

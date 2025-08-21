@@ -8,13 +8,21 @@ import 'package:flutter_coffee_app/widget/loading.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit(this.authRepository) : super(LoginInitial());
+  LoginCubit(this.authRepository) : super(LoginInitial()) {
+    checkToken();
+  }
 
   final AuthRepository authRepository;
   final pref = sl.get<StoreService>();
 
-  void initial() {}
+  Future<void> checkToken() async {
+    final token = await pref.getToken(); // hoặc getAuthResponse()?.token
+    if (token != null && token.isNotEmpty) {
+      emit(LoginSuccessState(authID: token));
+    }
+  }
 
+  // Hàm login hiện tại
   Future<void> callAPILogin(String phone_number, String password) async {
     sl.get<Loading>().show();
     try {

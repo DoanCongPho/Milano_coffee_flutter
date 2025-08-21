@@ -21,7 +21,7 @@ dependencies:
   native_dio_adapter: ^1.5.0
   loading_indicator: any
   cached_network_image: any 
-  qr_code_scanner: any 
+  mobile_scanner: ^7.0.1
 
  
 
