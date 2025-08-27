@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_coffee_app/module/main_page/cubit/main_cubit.dart';
 import 'package:flutter_coffee_app/module/home_page/home_page.dart';
 import 'package:flutter_coffee_app/module/Qr/qr_page.dart';
+import 'package:flutter_coffee_app/module/map_page/map_page.dart';
 import 'package:flutter_coffee_app/module/other/update_profile_page.dart';
 import 'package:flutter_coffee_app/module/Order/order_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +13,7 @@ class MainPage extends StatelessWidget {
     HomePage(),
     OrderPage(),
     QRPage(),
-    VoucherPage(),
+    MapPage(),
     UpdateProfilePage(),
   ];
   @override

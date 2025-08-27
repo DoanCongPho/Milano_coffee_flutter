@@ -22,6 +22,10 @@ dependencies:
   loading_indicator: any
   cached_network_image: any 
   mobile_scanner: ^7.0.1
+  flutter_map: any 
+  latlong2: any 
+  geolocator: any
+  equatable: any
 
  
 
