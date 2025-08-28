@@ -20,15 +20,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
-    _initAPI();
-  }
-
-  Future<void> _initAPI() async {
-    await context.read<HomeCubit>().loadUserData();
-    await context.read<HomeCubit>().loadStore();
-    await context.read<HomeCubit>().updateNearestStoreID();
-    await context.read<HomeCubit>().loadProduct();
   }
 
   @override

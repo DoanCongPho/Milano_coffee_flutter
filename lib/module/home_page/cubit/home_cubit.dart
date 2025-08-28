@@ -15,8 +15,18 @@ class HomeCubit extends Cubit<HomeState> {
   String _cursorStore = '';
   String _name = 'Người dùng';
   String _nearestStoreID = '';
-
+  bool _initialized = false;
   HomeCubit(this._homeRepository) : super(HomeInitial());
+
+  Future<void> initAPI() async {
+    if (_initialized) return; // <-- prevent running twice
+    _initialized = true;
+
+    await loadUserData();
+    await loadStore();
+    await updateNearestStoreID();
+    await loadProduct();
+  }
 
   Future<void> loadUserData() async {
     final pref = sl.get<StoreService>();

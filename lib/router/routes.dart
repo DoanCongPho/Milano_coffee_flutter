@@ -33,8 +33,7 @@ class Routes {
           builder: (_) => MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (_) =>
-                    HomeCubit(sl.get<HomeRepository>())..loadUserData(),
+                create: (_) => HomeCubit(sl.get<HomeRepository>())..initAPI(),
               ),
               BlocProvider(create: (_) => sl.get<NavigationCubit>()),
             ],

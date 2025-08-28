@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_coffee_app/model/remote/resource/home_response.dart';
+import 'package:flutter_coffee_app/module/home_page/cubit/home_cubit.dart';
+import 'package:flutter_coffee_app/module/home_page/cubit/home_state.dart';
 import 'package:flutter_coffee_app/module/map_page/cubit/map_cubit.dart';
 import 'package:flutter_coffee_app/module/map_page/cubit/map_state.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-
-// lat: 10.7712845,
-//       lng: 106.6748306,
 
 class MapPage extends StatelessWidget {
   const MapPage({super.key});
-
   @override
   Widget build(BuildContext context) {
+    final stores = context.select<HomeCubit, List<Store>>((cubit) {
+      final state = cubit.state;
+      return state is HomeLoaded ? state.stores : <Store>[];
+    });
     return BlocProvider(
       create: (_) => MapCubit()
-        ..addStoreMarker(const LatLng(10.7712845, 106.6748306))
-        ..addStoreMarker(const LatLng(21.0060, 105.8220))
+        ..loadCurrentMaker(stores)
         ..loadCurrentLocation(),
       child: BlocBuilder<MapCubit, MapState>(
         builder: (context, state) {
@@ -42,8 +43,6 @@ class MapPage extends StatelessWidget {
                     MarkerLayer(markers: state.markers),
                   ],
                 ),
-
-                // Ô tìm kiếm
                 Positioned(
                   top: 10,
                   left: 10,
@@ -72,9 +71,7 @@ class MapPage extends StatelessWidget {
                         ),
                         child: IconButton(
                           icon: const Icon(Icons.list),
-                          onPressed: () {
-                            // mở danh sách cửa hàng
-                          },
+                          onPressed: () {},
                         ),
                       ),
                     ],
