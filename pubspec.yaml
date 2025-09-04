@@ -26,6 +26,7 @@ dependencies:
   latlong2: any 
   geolocator: any
   equatable: any
+  webview_flutter:  any 
 
  
 

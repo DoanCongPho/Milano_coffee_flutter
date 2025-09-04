@@ -52,8 +52,6 @@ class MapCubit extends Cubit<MapState> {
         );
         return;
       }
-
-      // get current position
       final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );

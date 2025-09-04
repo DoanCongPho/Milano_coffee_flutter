@@ -17,7 +17,7 @@ class AuthInterceptor extends InterceptorsWrapper {
     if (authKey != null && authKey.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $authKey';
     }
-
+    
     // Add all required headers
     options.headers.addAll({
       'Content-Type': 'application/json',

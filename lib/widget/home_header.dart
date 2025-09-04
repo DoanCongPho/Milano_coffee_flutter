@@ -58,7 +58,7 @@ class HomeHeader extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => NewsDetailPage(),
+                                builder: (context) => NewsPage(),
                               ),
                             );
                           },
