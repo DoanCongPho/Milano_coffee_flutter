@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,9 +32,13 @@ Future<void> main() async {
   await app_locator.Locator.setupLocator(preferences);
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  final firebaseApi = FirebaseApi();
-  await firebaseApi.initNotifications();
+  // analytics
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
+    analytics: analytics,
+  );
+  //crashlytics
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
   FlutterError.onError = (FlutterErrorDetails errorDetails) {
     FlutterError.presentError(errorDetails);
@@ -41,6 +49,21 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+  // Social login
+  final firebaseApi = FirebaseApi();
+  await firebaseApi.initNotifications();
+
+  //remote config
+
+  final remoteConfig = FirebaseRemoteConfig.instance;
+  await remoteConfig.setConfigSettings(
+    RemoteConfigSettings(
+      fetchTimeout: const Duration(minutes: 1),
+      minimumFetchInterval: Duration(hours: 1),
+    ),
+  );
+  await remoteConfig.setDefaults({"Quantity": 10, "Color": "blue"});
+  await remoteConfig.fetchAndActivate();
 
   runApp(const MainApp());
 }

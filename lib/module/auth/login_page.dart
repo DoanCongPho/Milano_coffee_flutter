@@ -1,4 +1,6 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_coffee_app/cores/locator/locator.dart';
@@ -80,6 +82,7 @@ class LoginPage extends StatelessWidget {
         },
         listener: (BuildContext context, LoginState state) {
           if (state is LoginSuccessState) {
+            FirebaseAnalytics.instance.logEvent(name: "login_success");
             sl.get<NavigatorService>().replace(Routes.mainPage);
           }
           if (state is LoginFailState) {

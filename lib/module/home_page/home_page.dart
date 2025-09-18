@@ -1,3 +1,4 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_coffee_app/module/auth/cubit/custom_button.dart';
 import 'package:flutter_coffee_app/module/home_page/cubit/home_cubit.dart';
@@ -24,6 +25,25 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    final colorName = remoteConfig.getString("Color");
+    Color bgColor;
+    switch (colorName.toLowerCase()) {
+      case "red":
+        bgColor = Colors.red;
+        break;
+      case "white":
+        bgColor = Colors.white;
+        break;
+      case "blue":
+        bgColor = Colors.blue;
+        break;
+      case "green":
+        bgColor = Colors.green;
+        break;
+      default:
+        bgColor = Colors.white; // fallback
+    }
     return Scaffold(
       body: SafeArea(
         child: BlocBuilder<HomeCubit, HomeState>(
@@ -31,7 +51,7 @@ class _HomePageState extends State<HomePage> {
             if (state is HomeLoaded) {
               return Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: bgColor,
                   borderRadius: BorderRadius.circular(16),
                 ),
 
