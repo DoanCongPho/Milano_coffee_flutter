@@ -3,10 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_coffee_app/cores/locator/locator.dart';
 import 'package:flutter_coffee_app/cores/repositories/home_repository.dart';
 import 'package:flutter_coffee_app/module/Qr/qr_page.dart';
+import 'package:flutter_coffee_app/module/auth/login_page.dart';
 import 'package:flutter_coffee_app/module/home_page/cubit/home_cubit.dart';
 import 'package:flutter_coffee_app/module/main_page/cubit/main_cubit.dart';
 import 'package:flutter_coffee_app/module/main_page/main_page.dart';
 import 'package:flutter_coffee_app/module/other/update_profile_page.dart';
+import 'package:flutter_coffee_app/provider/google_signIn_provider.dart';
+import 'package:provider/provider.dart';
 
 class Routes {
   static const loginPage = '/login_page';
@@ -20,14 +23,15 @@ class Routes {
 
   static Route<dynamic> generateRoutes(RouteSettings settings) {
     switch (settings.name) {
-      // case mainPage:
-      //   return MaterialPageRoute(
-      //     settings: settings,
-      //     builder: (_) => BlocProvider(
-      //       create: (_) => sl.get<NavigationCubit>(),
-      //       child: MainPage(),
-      //     ),
-      //   );
+      case loginPage:
+        return MaterialPageRoute(
+          builder: (_) => MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (_) => GoogleSigninProvider()),
+            ],
+            child: LoginPage(),
+          ),
+        );
       case mainPage:
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(

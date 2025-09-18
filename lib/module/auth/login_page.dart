@@ -1,9 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_coffee_app/cores/locator/locator.dart';
 import 'package:flutter_coffee_app/cores/services/navigation_service.dart';
 import 'package:flutter_coffee_app/module/auth/cubit/login_cubit.dart';
+import 'package:flutter_coffee_app/module/auth/profile_page.dart';
 import 'package:flutter_coffee_app/router/routes.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_coffee_app/provider/google_signIn_provider.dart';
+import 'package:flutter_coffee_app/provider/facebook_sign_in.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -27,7 +32,6 @@ class LoginPage extends StatelessWidget {
                     left: 0,
                     right: 0,
                     bottom: 0,
-
                     child: _buildLoginWithBackground(),
                   ),
                   Positioned(
@@ -37,8 +41,6 @@ class LoginPage extends StatelessWidget {
                     bottom: 0,
 
                     child: Container(
-                      // height: 200,
-                      // color: Colors.blue,
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
@@ -50,7 +52,6 @@ class LoginPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
                         child: SingleChildScrollView(
                           child: Column(
-                            // crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               const SizedBox(height: 28),
                               _buildPhoneField(),
@@ -63,7 +64,7 @@ class LoginPage extends StatelessWidget {
                               const SizedBox(height: 28),
                               _buildDividerWithText(),
                               const SizedBox(height: 31),
-                              _buildSocialLoginButtons(),
+                              _buildSocialLoginButtons(context),
                               const SizedBox(height: 26),
                               _buildRegisterText(context),
                             ],
@@ -172,6 +173,7 @@ class LoginPage extends StatelessWidget {
 
   Widget _buildDividerWithText() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(child: Divider(thickness: 1)),
         Padding(
@@ -186,13 +188,43 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSocialLoginButtons() {
+  Widget _buildSocialLoginButtons(BuildContext context) {
     return Center(
-      child: Image.asset(
-        'assets/images/facebook_google.png', // ảnh gồm cả Facebook và Google
-        width: 128,
-        height: 44,
-        fit: BoxFit.contain,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            icon: Image.asset("assets/images/facebook_img.png"),
+            iconSize: 40,
+            onPressed: () => throw Exception(),
+
+            //    final fbProvider = context.read<FacebookSignInProvider>();
+            // await fbProvider.facebookLogin();
+
+            // if (FirebaseAuth.instance.currentUser != null) {
+            //   Navigator.of(context).pushReplacement(
+            //     MaterialPageRoute(builder: (_) => const ProfilePage()),
+            //   );
+            // }
+          ),
+
+          SizedBox(width: 20),
+          IconButton(
+            icon: Image.asset("assets/images/google_img.png"),
+            iconSize: 40,
+            onPressed: () async {
+              final provider = context.read<GoogleSigninProvider>();
+              await provider.googleLogin(); // chờ login xong
+
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const ProfilePage()),
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -204,7 +236,6 @@ class LoginPage extends StatelessWidget {
         Text('Bạn chưa có tài khoản?'),
         TextButton(
           onPressed: () {
-            // TODO: Navigate to register page
             print('object');
           },
           child: Text(

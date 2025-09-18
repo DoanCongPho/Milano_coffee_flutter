@@ -52,4 +52,7 @@ class LoginCubit extends Cubit<LoginState> {
   void showHidePassword() {
     emit(ShowHidePasswordState());
   }
+
+
 }
+      
