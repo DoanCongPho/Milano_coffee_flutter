@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_coffee_app/router/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_coffee_app/provider/google_signIn_provider.dart';
 import 'package:flutter_coffee_app/provider/facebook_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -227,6 +230,19 @@ class LoginPage extends StatelessWidget {
               }
             },
           ),
+
+          // Apple (only on iOS)
+          if (Platform.isIOS)
+            SizedBox(
+              width: 50,
+              height: 50,
+              child: SignInWithAppleButton(
+                style: SignInWithAppleButtonStyle.black, // or white
+                onPressed: () async {
+                  // TODO: implement Apple login logic
+                },
+              ),
+            ),
         ],
       ),
     );

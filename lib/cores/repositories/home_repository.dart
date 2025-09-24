@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_coffee_app/cores/network/api/home.api.dart';
 import 'package:flutter_coffee_app/model/remote/resource/home_response.dart';
 
 class HomeRepository {
   final HomeAPI api;
-  HomeRepository(this.api);
+  final useFirestore;
+  HomeRepository(this.api, {this.useFirestore = false});
 
   // Fetch banners
   Future<HomeResponse> fetchBanners({
@@ -20,6 +22,14 @@ class HomeRepository {
     required String store,
     required int limit,
   }) async {
+    if (useFirestore) {
+      final snap = await FirebaseFirestore.instance.collection('Drink').get();
+      final products = snap.docs.map((doc) {
+        return ProductItem.fromJson({'id': doc.id, ...doc.data()});
+      }).toList();
+
+      return ProductResponse(cursor: '', data: products);
+    }
     return await api.getProductList(cursor: cursor, limit: limit, store: store);
   }
 

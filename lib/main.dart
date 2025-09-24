@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -32,6 +33,7 @@ Future<void> main() async {
   await app_locator.Locator.setupLocator(preferences);
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   // analytics
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
@@ -54,7 +56,6 @@ Future<void> main() async {
   await firebaseApi.initNotifications();
 
   //remote config
-
   final remoteConfig = FirebaseRemoteConfig.instance;
   await remoteConfig.setConfigSettings(
     RemoteConfigSettings(
@@ -64,6 +65,11 @@ Future<void> main() async {
   );
   await remoteConfig.setDefaults({"Quantity": 10, "Color": "blue"});
   await remoteConfig.fetchAndActivate();
+
+  //Firestore
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: true,
+  );
 
   runApp(const MainApp());
 }
