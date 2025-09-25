@@ -47,6 +47,7 @@ dependencies {
 
     // Firebase Analytics (thêm các Firebase khác nếu cần)
     implementation("com.google.firebase:firebase-analytics")
+    implementation ("com.facebook.android:facebook-android-sdk:latest.release")
 
      coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

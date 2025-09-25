@@ -15,6 +15,22 @@ import 'package:flutter_coffee_app/provider/google_signIn_provider.dart';
 import 'package:flutter_coffee_app/provider/facebook_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
+// Future<UserCredential> signInWithFacebook() async {
+//   // Trigger the sign-in flow
+//   final LoginResult loginResult = await FacebookAuth.instance.login(
+//     permissions: ["email", "public_profile"],
+//   );
+
+//   // Create a credential from the access token
+//   final OAuthCredential facebookAuthCredential =
+//       FacebookAuthProvider.credential('${loginResult.accessToken?.token}');
+
+//   // Once signed in, return the UserCredential
+//   return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+// }
+
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
@@ -202,16 +218,16 @@ class LoginPage extends StatelessWidget {
           IconButton(
             icon: Image.asset("assets/images/facebook_img.png"),
             iconSize: 40,
-            onPressed: () => throw Exception(),
+            onPressed: () async {
+              final fbProvider = context.read<FacebookSignInProvider>();
+              await fbProvider.facebookLogin();
 
-            //    final fbProvider = context.read<FacebookSignInProvider>();
-            // await fbProvider.facebookLogin();
-
-            // if (FirebaseAuth.instance.currentUser != null) {
-            //   Navigator.of(context).pushReplacement(
-            //     MaterialPageRoute(builder: (_) => const ProfilePage()),
-            //   );
-            // }
+              if (FirebaseAuth.instance.currentUser != null) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const ProfilePage()),
+                );
+              }
+            },
           ),
 
           SizedBox(width: 20),

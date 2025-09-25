@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_coffee_app/cores/repositories/city_repository.dart';
 import 'package:flutter_coffee_app/model/remote/city.dart';
+import 'package:flutter_coffee_app/provider/facebook_sign_in.dart';
 import 'package:flutter_coffee_app/provider/google_signIn_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,11 +26,27 @@ class ProfilePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
-              final provider = Provider.of<GoogleSigninProvider>(
-                context,
-                listen: false,
-              );
-              await provider.logout();
+              final user = FirebaseAuth.instance.currentUser;
+
+              if (user != null) {
+                for (final info in user.providerData) {
+                  if (info.providerId == 'google.com') {
+                    final googleProvider = Provider.of<GoogleSigninProvider>(
+                      context,
+                      listen: false,
+                    );
+                    await googleProvider.logout();
+                  } else if (info.providerId == 'facebook.com') {
+                    final facebookProvider =
+                        Provider.of<FacebookSignInProvider>(
+                          context,
+                          listen: false,
+                        );
+                    await facebookProvider.logout();
+                  }
+                }
+              }
+
               Navigator.of(context).pushReplacementNamed('/login_page');
             },
           ),

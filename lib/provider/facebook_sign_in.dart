@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
-
 class FacebookSignInProvider with ChangeNotifier {
   User? user;
-  
-
 
   Future<void> facebookLogin() async {
     try {
-      final LoginResult result = await FacebookAuth.instance.login();
-  
+      final LoginResult result = await FacebookAuth.instance.login(
+        permissions: ['public_profile', 'email'],
+      );
+
       if (result.status == LoginStatus.success) {
         final accessToken = result.accessToken!.token;
 
@@ -22,7 +21,7 @@ class FacebookSignInProvider with ChangeNotifier {
         );
 
         user = userCredential.user;
-        notifyListeners(); // tells UI to rebuild if using Consumer or watch
+        notifyListeners();
       } else {
         print('Facebook login failed: ${result.status}');
       }
